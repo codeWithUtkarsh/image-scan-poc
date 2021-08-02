@@ -121,7 +121,6 @@ func RunContainer(client *client.Client, imagename string, containername string,
 		config,
 		hostConfig,
 		networkConfig,
-		nil,
 		containername,
 	)
 

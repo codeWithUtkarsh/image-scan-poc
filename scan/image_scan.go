@@ -1,8 +1,8 @@
-package main
+package scan
 
 import (
 	"fmt"
-	"github.com/codeWithUtkarsh/image-scan/functions"
+	"github.com/codeWithUtkarsh/image-scan-poc/functions"
 
 	"github.com/BurntSushi/toml"
 	"github.com/docker/docker/client"
