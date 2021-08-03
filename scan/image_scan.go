@@ -21,6 +21,8 @@ type Config struct {
 func ImageScanWithCustomCommands(client *client.Client, imagename string, commands []string, dirToSave string, inputEnv []string) error {
 
 	//---------- Loading configuration -------------
+	
+	fmt.Println("Starting")
 	path, errr := os.Getwd()
 	if errr != nil {
 	    log.Println(errr)
