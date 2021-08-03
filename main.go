@@ -10,19 +10,6 @@ import (
 	"github.com/docker/docker/client"
 )
 
-type envVariable []string
-
-func (i *envVariable) String() string {
-	return "my string representation"
-}
-
-func (i *envVariable) Set(value string) error {
-	*i = append(*i, value)
-	return nil
-}
-
-var envFlags envVariable
-
 func main() {
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
@@ -32,13 +19,25 @@ func main() {
 	commands := []string{"python -m ensurepip --upgrade", "pip3 freeze > requirements.txt", "pip3 install cyclonedx-bom==0.4.3 safety", "cyclonedx-py -j -o /tmp/sbom.json", "safety check -r requirements.txt --json --output /tmp/cve.json || true"} //mandatory input, hardcoded for now
 	directoryToSaveGeneratedFiles := "/tmp"
 
+	var config scan.Config
 	imagename := flag.String("imagename", "xyz", "Docker Imagename to scan")
+
+	username := flag.String("username", "", "Docker repo username")
+	password := flag.String("password", "", "Docker repo password")
+	port := flag.String("port", "8080", "Define Port (Optional)")
+	containerName := flag.String("container-name", "scan_container", "Define Container Name (Optional)")
+
 	inputEnv := flag.StringArray("env", []string{}, "Environment Variable")
+
+	config.UserName = *username
+	config.Password = *password
+	config.Port = *port
+	config.ContainerName = *containerName
 
 	flag.Parse()
 	fmt.Println(*inputEnv)
 
-	err = scan.ImageScanWithCustomCommands(cli, *imagename, commands, directoryToSaveGeneratedFiles, *inputEnv)
+	err = scan.ImageScanWithCustomCommands(cli, *imagename, commands, directoryToSaveGeneratedFiles, *inputEnv, config)
 	if err != nil {
 		log.Println(err)
 	}

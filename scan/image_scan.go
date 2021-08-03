@@ -2,12 +2,11 @@ package scan
 
 import (
 	"fmt"
-	"os"
 	"log"
+	"os"
 
 	"github.com/codeWithUtkarsh/image-scan-poc/functions"
 
-	"github.com/BurntSushi/toml"
 	"github.com/docker/docker/client"
 )
 
@@ -18,22 +17,22 @@ type Config struct {
 	Password      string
 }
 
-func ImageScanWithCustomCommands(client *client.Client, imagename string, commands []string, dirToSave string, inputEnv []string) error {
+func ImageScanWithCustomCommands(client *client.Client, imagename string, commands []string, dirToSave string, inputEnv []string, config Config) error {
 
 	//---------- Loading configuration -------------
-	
+
 	fmt.Println("Starting")
 	path, errr := os.Getwd()
 	if errr != nil {
-	    log.Println(errr)
+		log.Println(errr)
 	}
 	fmt.Println(path)
 
-	var config Config
-	if _, err := toml.DecodeFile("config.toml", &config); err != nil {
-		fmt.Println("Error while reading configuration file")
-		return err
-	}
+	// var config Config
+	// if _, err := toml.DecodeFile("config.toml", &config); err != nil {
+	// 	fmt.Println("Error while reading configuration file")
+	// 	return err
+	// }
 
 	//---------- Pulling image -------------
 	err := functions.PullImage(client, config.UserName, config.Password, imagename) //imagename is ${ImageRegistry}:${ImageTag} eg: 1645370/test-imag:latest
