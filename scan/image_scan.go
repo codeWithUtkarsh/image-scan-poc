@@ -2,6 +2,8 @@ package scan
 
 import (
 	"fmt"
+	"os"
+	"log"
 
 	"github.com/codeWithUtkarsh/image-scan-poc/functions"
 
@@ -19,6 +21,12 @@ type Config struct {
 func ImageScanWithCustomCommands(client *client.Client, imagename string, commands []string, dirToSave string, inputEnv []string) error {
 
 	//---------- Loading configuration -------------
+	path, errr := os.Getwd()
+	if errr != nil {
+	    log.Println(errr)
+	}
+	fmt.Println(path)
+
 	var config Config
 	if _, err := toml.DecodeFile("config.toml", &config); err != nil {
 		fmt.Println("Error while reading configuration file")
