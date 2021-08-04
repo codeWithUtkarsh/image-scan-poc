@@ -70,7 +70,6 @@ func RunContainer(client *client.Client, imagename string, containername string,
 		Entrypoint:   expectedEntrypoint,
 	}
 
-	// Creating the actual container. This is "nil,nil,nil" in every example.
 	cont, err := client.ContainerCreate(
 		context.Background(),
 		config,
@@ -102,7 +101,7 @@ func RunContainer(client *client.Client, imagename string, containername string,
 		if !resp.State.Running {
 			run = false
 		}
-		log.Printf("Container %s still executing commands", cont.ID)
+//		log.Printf("Container %s still executing commands", cont.ID)
 		time.Sleep(250 * time.Millisecond)
 	}
 
