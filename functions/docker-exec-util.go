@@ -77,12 +77,7 @@ func RunContainer(client *client.Client, imagename string, containername string,
 	// Configured hostConfig:
 	hostConfig := &container.HostConfig{
 		PortBindings: nat.PortMap{
-			newport: []nat.PortBinding{
-				{
-					HostIP:   "0.0.0.0",
-					HostPort: port,
-				},
-			},
+			newport: []nat.PortBinding{},
 		},
 		RestartPolicy: container.RestartPolicy{
 			Name: "always",
