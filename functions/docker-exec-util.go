@@ -68,7 +68,7 @@ func ExecCommand(client *client.Client, containerId string, commands []string) e
 
 func RunContainer(client *client.Client, imagename string, containername string, port string, inputEnv []string) (string, error) {
 	// Define a PORT opening
-	newport, err := nat.NewPort("tcp", port)
+	newport, err := nat.NewPort("tcp", "80")
 	if err != nil {
 		fmt.Println("Unable to create docker port")
 		return "", err
@@ -112,7 +112,6 @@ func RunContainer(client *client.Client, imagename string, containername string,
 		Image:        imagename,
 		Env:          inputEnv,
 		ExposedPorts: exposedPorts,
-		Hostname:     fmt.Sprintf("%s-hostnameexample", imagename),
 	}
 
 	// Creating the actual container. This is "nil,nil,nil" in every example.
@@ -130,7 +129,11 @@ func RunContainer(client *client.Client, imagename string, containername string,
 	}
 
 	// Run the actual container
-	client.ContainerStart(context.Background(), cont.ID, types.ContainerStartOptions{})
+	err = client.ContainerStart(context.Background(), cont.ID, types.ContainerStartOptions{})
+	if err != nil {
+		log.Println(err.Error())
+	}
+
 	log.Printf("Container %s is created", cont.ID)
 	return cont.ID, err
 }
